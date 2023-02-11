@@ -24,7 +24,7 @@
                     <tr>
                         <td>
                             <label for="distance">Distance (miles)</label>
-                            <input type="text" id="distance" name="distance" value="10">
+                            <input type="number" id="distance" name="distance" value="10">
                         </td>
                         <td>
                             <label for="category">Category<span class="star">*</span></label>
@@ -42,7 +42,7 @@
                 <br>
                 <label for="location">Location<span class="star">*</span></label>
                 <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
-                    style="display: inline !important; width: auto !important; height: 12px;" onchange="autoSelect(this)"><span>Auto-Detect Location</span>
+                    style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span>Auto-Detect Location</span>
                 <input type="text" id="location" name="location" required>
                 
                 <br><br>
@@ -62,7 +62,7 @@
     </center>
     <center>
         <div id="eventDetails" style="margin-top: 100px">
-            
+
         </div>
     </center>
     <center>

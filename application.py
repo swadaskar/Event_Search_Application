@@ -95,13 +95,15 @@ def eventInfo():
     artists = [artist['name'] for artist in eventDetailsData['_embedded']['attractions']]
     genres = [eventDetailsData['_embedded']['attractions'][0]
               ['classifications'][0][type]['name'] for type in ['subGenre','genre','segment','subType','type']]
-    
+    priceRange=""
+    if 'priceRanges' in eventDetailsData:
+        priceRange=str(eventDetailsData['priceRanges'][0]['min'])+'-'+str(eventDetailsData['priceRanges'][0]['max'])
     eventData.append({
         'date': date,
         'artist': " | ".join(artists),
         'venue': eventDetailsData['_embedded']['venues'][0]['name'],
         'genre': " | ".join(genres),
-        'priceRange': str(eventDetailsData['priceRanges'][0]['min'])+'-'+str(eventDetailsData['priceRanges'][0]['max']),
+        'priceRange': priceRange,
         'ticketStatus': eventDetailsData['dates']['status']['code'],
         'buyAt': eventDetailsData['url'],
         'seatMap': eventDetailsData['seatmap']['staticUrl']

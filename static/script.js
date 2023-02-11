@@ -14,7 +14,7 @@ function getGeoHash(address) {
     jsonObject = JSON.parse(xhttp.responseText);
     return jsonObject.results[0].geometry.location.lat + ',' + jsonObject.results[0].geometry.location.lng;
 }
-
+//dddd
 function searchEvents() {
     // collect the data
 

@@ -12,49 +12,50 @@
     <title>Event Search</title>
 </head>
 <body>
-    <div class="searchForm">
-        <div class="heading">Event Search</div>
-        <br>
-        <div class="contents">
-            <form action="javascript:void(0);" name="eventForm" method="get">
-                <label for="keyword">Keyword<span class="star">*</span></label>
-                <input type="text" id="keyword" name="keyword" required>
+    <center>
+        <div class="searchForm">
+            <div class="heading">Event Search</div>
+            <br>
+            <div class="contents">
+                <form action="javascript:void(0);" name="eventForm" method="get">
+                    <label for="keyword">Keyword<span class="star">*</span></label>
+                    <input type="text" id="keyword" name="keyword" required>
 
-                <table>
-                    <tr>
-                        <td>
-                            <label for="distance">Distance (miles)</label>
-                            <input type="number" id="distance" name="distance" value="10">
-                        </td>
-                        <td>
-                            <label for="category">Category<span class="star">*</span></label>
-                            <select id="category" name="category" required>
-                                <option value="default">Default</option>
-                                <option value="music">Music</option>
-                                <option value="sports">Sports</option>
-                                <option value="art">Art</option>
-                                <option value="film">Film</option>
-                                <option value="miscellaneous">Miscellaneous</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                <label for="location">Location<span class="star">*</span></label>
-                <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
-                    style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span>Auto-Detect Location</span>
-                <input type="text" id="location" name="location" required>
-                
-                <br><br>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="distance">Distance (miles)</label>
+                                <input type="number" id="distance" name="distance" value="10">
+                            </td>
+                            <td>
+                                <label for="category">Category<span class="star">*</span></label>
+                                <select id="category" name="category" required>
+                                    <option value="default">Default</option>
+                                    <option value="music">Music</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="art">Art</option>
+                                    <option value="film">Film</option>
+                                    <option value="miscellaneous">Miscellaneous</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <label for="location">Location<span class="star">*</span></label>
+                    <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
+                        style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span>Auto-Detect Location</span>
+                    <input type="text" id="location" name="location" required>
+                    
+                    <br><br>
 
-                <div>
-                    <button class="submit" type="submit" onclick="searchEvents()">SEARCH</button>
-                    <button class="clear" type="reset" onclick="resetForm()">CLEAR</button>
-                </div>
-            </form>
+                    <div>
+                        <button class="submit" type="submit" onclick="searchEvents()">SEARCH</button>
+                        <button class="clear" type="reset" onclick="resetForm()">CLEAR</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-
+    </center>
     <center>
         <div id="eventList">
             Currently no records!

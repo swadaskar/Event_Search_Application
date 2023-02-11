@@ -88,8 +88,6 @@ def eventInfo():
     if 'error' in eventDetailsData:
         return json.dumps([])
 
-    eventData = []
-
     date = eventDetailsData['dates']['start']['localDate'] + \
         ","+eventDetailsData['dates']['start']['localTime']
     artists = [artist['name'] for artist in eventDetailsData['_embedded']['attractions']]
@@ -98,7 +96,7 @@ def eventInfo():
     priceRange=""
     if 'priceRanges' in eventDetailsData:
         priceRange=str(eventDetailsData['priceRanges'][0]['min'])+'-'+str(eventDetailsData['priceRanges'][0]['max'])
-    eventData.append({
+    eventData = {
         'date': date,
         'artist': " | ".join(artists),
         'venue': eventDetailsData['_embedded']['venues'][0]['name'],
@@ -107,7 +105,7 @@ def eventInfo():
         'ticketStatus': eventDetailsData['dates']['status']['code'],
         'buyAt': eventDetailsData['url'],
         'seatMap': eventDetailsData['seatmap']['staticUrl']
-    })
+    }
     return json.dumps(eventData, indent=4)
 
 
@@ -116,34 +114,33 @@ def eventInfo():
 
 @app.route('/venue/info')
 def venueInfo():
-    # keyword = request.args.get('keyword)
+    keyword = request.args.get('keyword')
 
-    keyword = 'Los Angeles Memorial Coliseum'
+    # keyword = 'Los Angeles Memorial Coliseum'
     params = {
         'apikey': apiKey,
         'keyword': keyword
     }
-    # response = requests.get(baseAPIUrl+'venues', params=params)
-    # venueData=response.json()
+    response = requests.get(baseAPIUrl+'venues', params=params)
+    venueDetailsData=response.json()
     
     ### ------------Sample Data------------------ ####
-    response = requests.get("http://127.0.0.1:5000/sampleVenueData")
-    venueDetailsData = response.json()
+    # response = requests.get("http://127.0.0.1:5000/sampleVenueData")
+    # venueDetailsData = response.json()
     ### ------------Remove when done------------------ ####
 
     # If there is error response
     if 'error' in venueDetailsData:
         return json.dumps([])
 
-    venueData = []
     venueDetailsData=venueDetailsData['_embedded']['venues'][0]
-    venueData.append({
+    venueData={
         'name': venueDetailsData['name'],
         'address': venueDetailsData['address']['line1'],
         'city': venueDetailsData['city']['name']+', '+venueDetailsData['state']['stateCode'],
         'postcode': venueDetailsData['postalCode'],
         'upcomingEvents': venueDetailsData['url']
-    })
+    }
     return json.dumps(venueData, indent=4)
 
 @app.route('/sampleData')

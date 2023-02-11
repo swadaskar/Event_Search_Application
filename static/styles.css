@@ -1,0 +1,9 @@
+.textContent {
+    width: 50%;
+    float: left;
+}
+
+.imageContent {
+    width: 50%;
+    float: right;
+}

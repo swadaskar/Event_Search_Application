@@ -1,0 +1,81 @@
+{
+  "_embedded": {
+    "venues": [
+      {
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/venues/KovZpZAIF7aA?locale=en-us"
+          }
+        },
+        "address": {
+          "line1": "3911 S. Figueroa St"
+        },
+        "aliases": [
+          "la coliseum",
+          "la colliseum",
+          "los angeles coliseum",
+          "los angeles colliseum"
+        ],
+        "city": {
+          "name": "Los Angeles"
+        },
+        "country": {
+          "countryCode": "US",
+          "name": "United States Of America"
+        },
+        "dmas": [
+          {
+            "id": 223
+          },
+          {
+            "id": 324
+          },
+          {
+            "id": 354
+          },
+          {
+            "id": 383
+          }
+        ],
+        "id": "KovZpZAIF7aA",
+        "locale": "en-us",
+        "location": {
+          "latitude": "34.014053",
+          "longitude": "-118.287865"
+        },
+        "markets": [
+          {
+            "id": "27",
+            "name": "Los Angeles"
+          }
+        ],
+        "name": "Los Angeles Memorial Coliseum",
+        "postalCode": "90037",
+        "state": {
+          "name": "California",
+          "stateCode": "CA"
+        },
+        "test": false,
+        "timezone": "America/Los_Angeles",
+        "type": "venue",
+        "upcomingEvents": {
+          "_filtered": 0,
+          "_total": 9,
+          "ticketmaster": 9
+        },
+        "url": "https://www.ticketmaster.com/los-angeles-memorial-coliseum-tickets-los-angeles/venue/82780"
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "/discovery/v2/venues?keyword=Los+Angeles+Memorial+Coliseum"
+    }
+  },
+  "page": {
+    "number": 0,
+    "size": 20,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

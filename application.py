@@ -11,7 +11,7 @@ apiKey = "Jdf4GP2674AxHAGBMLInCvwN6ZydDgZ5"
 
 @app.route('/')
 def index():
-    return "Hello World"
+    return "Hello World!"
 
 # event search sample url
 # https://app.ticketmaster.com/discovery/v2/events.json?apikey=Jdf4GP2674AxHAGBMLInCvwN6ZydDgZ5&keyword=Los+Angeles&segmentId=KZFzniwnSyZfZ7v7nE&radius=10&unit=miles&geoPoint=9q5cs
@@ -90,7 +90,7 @@ def eventInfo():
 
     date = eventDetailsData['dates']['start']['localDate'] + \
         ","+eventDetailsData['dates']['start']['localTime']
-    artists = [artist['name'] for artist in eventDetailsData['_embedded']['attractions']]
+    artists = [[artist['name'],artist['url']] for artist in eventDetailsData['_embedded']['attractions']]
     genres = [eventDetailsData['_embedded']['attractions'][0]
               ['classifications'][0][type]['name'] for type in ['subGenre','genre','segment','subType','type']]
     priceRange=""
@@ -98,7 +98,7 @@ def eventInfo():
         priceRange=str(eventDetailsData['priceRanges'][0]['min'])+'-'+str(eventDetailsData['priceRanges'][0]['max'])
     eventData = {
         'date': date,
-        'artist': " | ".join(artists),
+        'artist': artists,
         'venue': eventDetailsData['_embedded']['venues'][0]['name'],
         'genre': " | ".join(genres),
         'priceRange': priceRange,

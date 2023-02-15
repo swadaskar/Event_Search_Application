@@ -12,15 +12,14 @@
     <title>Event Search</title>
 </head>
 <body>
-    <center>
+    <!-- <center> -->
         <div class="searchForm">
             <div class="heading">Event Search</div>
-            <br>
+            <hr><br>
             <div class="contents">
                 <form action="javascript:void(0);" name="eventForm" method="get">
                     <label for="keyword">Keyword<span class="star">*</span></label>
                     <input type="text" id="keyword" name="keyword" required>
-
                     <table>
                         <tr>
                             <td>
@@ -40,7 +39,6 @@
                             </td>
                         </tr>
                     </table>
-                    <br>
                     <label for="location">Location<span class="star">*</span></label>
                     <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
                         style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span>Auto-Detect Location</span>
@@ -55,20 +53,18 @@
                 </form>
             </div>
         </div>
-    </center>
-    <center>
-        <div id="eventList">
+    <!-- </center> -->
+    <!-- <center> -->
+        <div id="eventList" class="eventList">
             Currently no records!
         </div>
-    </center>
-    <center>
-        <div id="eventDetails" style="margin-top: 100px">
-
+    <!-- </center> -->
+    <!-- <center> -->
+        <div id="eventDetails" class="eventDetails" style="margin-top: 100px">
         </div>
-    </center>
+    <!-- </center> -->
     <center>
-        <div id="venueDetails" style="margin-top: 100px">
-        
+        <div id="venueDetails" class="venueDetails" style="margin-top: 100px">
         </div>
     </center>
 </body>

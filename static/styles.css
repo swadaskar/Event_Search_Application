@@ -1,9 +1,161 @@
-.textContent {
-    width: 50%;
-    float: left;
+
+body {
+    /* margin: 0; */
+    background-image: url('./images/background.jpg');
+    min-height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    color: white;
 }
 
-.imageContent {
-    width: 50%;
-    float: right;
+/* -----------------------Event Form------------------------- */
+
+.searchForm {
+    margin: 0 auto;
+    width: 580px;
+    margin-top: 64px;
+    padding: 20px;
+    border: 0px solid gray;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+}
+
+.searchForm .heading {
+    text-align: center;
+    font-size: 30px;
+}
+
+.searchForm .contents :is(input, select) {
+    width: 100%;
+    border-radius: 5px;
+    background: none;
+    padding: 5px;
+    border: 1px solid #fff;
+    margin: 5px 0px;
+}
+
+.searchForm .contents .submit {
+    padding: 12px;
+    border-radius: 7px;
+    background-color: #FAAC06;
+    border: 0px;
+    color: white;
+}
+
+.searchForm .contents .clear {
+    padding: 12px;
+    border-radius: 7px;
+    background-color: #008CBA;
+    border: 0px;
+    color: white;
+}
+
+.searchForm .star {
+    color: red;
+}
+
+.searchForm .contents label {
+    color: #008CBA;
+}
+
+.searchForm .contents table td {
+    padding: 0px 25px 0px 0px;
+}
+
+
+/* -------------------------Event List------------------------ */
+
+.eventList {
+    text-align: center;
+}
+
+.eventTable {
+    margin: 0 auto;
+    width: 1000px;
+    border-spacing: 0px;
+}
+
+.eventTable th {
+    background-color: white;
+    color: black;
+    padding: 10px 0px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.eventTable td {
+    text-align: center;
+    background-color: white;
+    color: black;
+    padding: 10px 0px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.eventTable th:has(a){
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.eventTable td a{
+    text-decoration: none;
+}
+
+.eventTable td a:hover {
+    color: #0674fa;
+    cursor: pointer;
+}
+
+
+/* --------------------------Event details--------------------------- */
+
+.eventDetails {
+    margin: 0 auto;
+    width: 835px;
+    height: 435px;
+    margin-top: 64px;
+    padding: 31px;
+    border: 0px solid gray;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+}
+
+.eventDetails .heading {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 35px;
+}
+
+.eventDetails .textContent {
+    width: 438px;
+}
+.eventDetails .textContent .subheading {
+    font-size: 21px;
+    color: #6af9f8;
+}
+
+.eventDetails .textContent .text {
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.eventDetails .textContent .text a{
+    color: #0674fa;
+}
+
+.eventDetails .imageContent{
+    /* zoom: 0.4; */
+    text-align: center;
+}
+
+.eventDetails .imageContent img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

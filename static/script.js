@@ -16,7 +16,7 @@ const IPInfoTokenKey = 'f9416a8146ee1d'
 
 function autoLocate(checkBox){
     if(checkBox.checked == true){
-        document.getElementById("location").disabled=true;
+        document.getElementById("location").style.display="none";
         document.getElementById("location").value = '';
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", baseIPInfoURL + '?token=' + IPInfoTokenKey, false);
@@ -25,7 +25,7 @@ function autoLocate(checkBox){
         latlon = jsonObject['loc']
     }
     else{
-        document.getElementById("location").disabled = false;
+        document.getElementById("location").style.display = "inline";
         latlon = ''
     }
 }
@@ -54,10 +54,10 @@ function searchEvents() {
     segmentID = categories[document.getElementById("category").value];
     radius = document.getElementById("distance").value;
     unit = "miles";
-    if (document.getElementById("location").disabled == false){
-        geoPoint = getGeoHash(document.getElementById("location").value);
-    }else{
+    if (document.getElementById("location").style.display == "none"){
         geoPoint = latlon;
+    }else{
+        geoPoint = getGeoHash(document.getElementById("location").value);
     }
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", baseBackendURL + `/event/search?keyword=${keyword}&segmentID=${segmentID}&radius=${radius}&unit=${unit}&geoPoint=${geoPoint}`,false);
@@ -74,17 +74,18 @@ function searchEvents() {
 }
 
 function makeTable(jsonObject) {
-    htmlText = '<table id="eventTable">'
+    htmlText = '<table id="eventTable" class="eventTable">'
     htmlText += '<tr>'
-    htmlText += '<th>Date</th>'
-    htmlText += '<th>Icon</th>'
-    htmlText += '<th onclick="sortTable(2)"><a>Event</a></th>'
-    htmlText += '<th onclick="sortTable(3)"><a>Genre</a></th>'
-    htmlText += '<th onclick="sortTable(4)"><a>Venue</a></th>'
+    htmlText += '<th style="width:12%;">Date</th>'
+    htmlText += '<th style="width:12%;">Icon</th>'
+    htmlText += '<th style="width:50%;" onclick="sortTable(2)"><a>Event</a></th>'
+    htmlText += '<th style="width:9%;" onclick="sortTable(3)"><a>Genre</a></th>'
+    htmlText += '<th style="width:17%;" onclick="sortTable(4)"><a>Venue</a></th>'
     htmlText += '</tr>'
     for (var i = 0; i < jsonObject.length && i<20 ; i++) {
+        let [date,time] = jsonObject[i]['date'].split(",")
         htmlText += '<tr>'
-        htmlText += '<td>' + jsonObject[i]['date'] + '</td>'
+        htmlText += '<td>' + date+ '<span style="display:block;">'+time+'</span></td>'
         htmlText += '<td><img src="' + jsonObject[i]['icon'] + '" alt="icon" width="50" height="50"></td>'
         htmlText += '<td onclick=\"eventInfo(\'' + jsonObject[i]['id'] +'\')\"><a>' + jsonObject[i]['event'] + '</a></td>'
         htmlText += '<td>' + jsonObject[i]['genre'] + '</td>'
@@ -168,32 +169,43 @@ function eventInfo(id) {
 }
 
 function makeEventInfo(jsonObject) {
+    let [date,time] = jsonObject['date'].split(",")
     htmlText = '<div class="eventInfo">'
-    htmlText += '<div class="heading">'+ jsonObject['artist'] + '</div>'
+    htmlText += '<div class="heading">'
+    htmlText += jsonObject['artist'][0][0]
+    for (var i = 1; i < jsonObject['artist'].length; i++) {
+        htmlText += ' vs. ' + jsonObject['artist'][i][0]
+    }
+    htmlText += '</div>'
+    htmlText += '<table><tr><td>'
     htmlText += '<div class="textContent">'
     htmlText += '<div class="subheading">Date</div>'
-    htmlText += '<div class="text">' + jsonObject['date'] + '</div>'
+    htmlText += '<div class="text">'+date+' '+time+'</div>'
     htmlText += '<div class="subheading">Artist/Team</div>'
-    htmlText += '<div class="text">' + jsonObject['artist'] + '</div>'
+    htmlText += '<div class="text"><a href="' + jsonObject['artist'][0][1] + '" target="_blank">' + jsonObject['artist'][0][0] + '</a>'
+    for (var i = 1; i < jsonObject['artist'].length; i++) {
+        htmlText += ' | <a href="' + jsonObject['artist'][i][1] +'" target="_blank">' + jsonObject['artist'][i][0] + '</a>'
+    }
+    htmlText += '</div>'
     htmlText += '<div class="subheading">Venue</div>'
     htmlText += '<div class="text">' + jsonObject['venue'] + '</div>'
     htmlText += '<div class="subheading">Genres</div>'
     htmlText += '<div class="text">' + jsonObject['genre'] + '</div>'
     if (jsonObject['priceRange'] != ""){
         htmlText += '<div class="subheading">Price Range</div>'
-        htmlText += '<div class="text">' + jsonObject['priceRange'] + '</div>'
+        htmlText += '<div class="text">' + jsonObject['priceRange'] + ' USD</div>'
     }
     htmlText += '<div class="subheading">Ticket Status</div>'
     htmlText += '<div class="text">' + jsonObject['ticketStatus'] + '</div>'
     htmlText += '<div class="subheading">Buy Ticket At</div>'
-    htmlText += '<div class="text"><a href=\'' + jsonObject['buyAt'] +'\'>Ticketmaster</a></div>'
-    htmlText += '</div>'
+    htmlText += '<div class="text"><a href="' + jsonObject['buyAt'] +'" target="_blank">Ticketmaster</a></div>'
+    htmlText += '</div></td><td>'
     htmlText += '<div class="imageContent">'
-    htmlText += '<img src="' + jsonObject['seatMap'] + '" alt="Seat Map" width="200" height="200">'
-    htmlText += '</div>'
+    htmlText += '<img src="' + jsonObject['seatMap'] + '" alt="Seat Map">'
+    htmlText += '</div></td></tr></table>'
     htmlText += '</div>'
     htmlText += '<div class="arrowVenue">'
-    htmlText += '<a onclick=\"venueInfo(\'' + jsonObject['venue'] + '\')\">'
+    htmlText += '<a onclick="venueInfo(\'' + jsonObject['venue'] + '\')">'
     htmlText += 'Show Venue Details'
     htmlText += '<p>Logo Down Arrow</p>'
     htmlText += '</a>'

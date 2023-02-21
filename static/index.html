@@ -14,17 +14,17 @@
 <body>
     <!-- <center> -->
         <div class="searchForm">
-            <div class="heading">Event Search</div>
+            <div class="heading">Events Search</div>
             <hr><br>
             <div class="contents">
                 <form action="javascript:void(0);" name="eventForm" method="get">
                     <label for="keyword">Keyword<span class="star">*</span></label>
-                    <input type="text" id="keyword" name="keyword" required>
+                    <input type="text" id="keyword" name="keyword" autocomplete="off" required>
                     <table>
                         <tr>
                             <td>
                                 <label for="distance">Distance (miles)</label>
-                                <input type="number" id="distance" name="distance" value="10">
+                                <input type="number" id="distance" name="distance" value="10" style="color:#7c7c7c;" autocomplete="off">
                             </td>
                             <td>
                                 <label for="category">Category<span class="star">*</span></label>
@@ -42,9 +42,10 @@
                     <label for="location">Location<span class="star">*</span></label>
                     <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
                         style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span>Auto-Detect Location</span>
-                    <input type="text" id="location" name="location" required>
+                    <input type="text" id="location" name="location" autocomplete="off" required>
                     
-                    <br><br>
+                    <br>
+                    <br>
 
                     <div>
                         <button class="submit" type="submit" onclick="searchEvents()">SEARCH</button>
@@ -55,16 +56,16 @@
         </div>
     <!-- </center> -->
     <!-- <center> -->
-        <div id="eventList" class="eventList">
+        <div id="eventList" class="eventList" style="display: none;">
             Currently no records!
         </div>
     <!-- </center> -->
-    <!-- <center> -->
-        <div id="eventDetails" class="eventDetails" style="margin-top: 100px">
-        </div>
-    <!-- </center> -->
     <center>
-        <div id="venueDetails" class="venueDetails" style="margin-top: 100px">
+        <div id="eventDetails" class="eventDetails" style="display: none;">
+        </div>
+    </center>
+    <center>
+        <div id="venueDetails" class="venueDetails" style="display: none;">
         </div>
     </center>
 </body>

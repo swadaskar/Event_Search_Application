@@ -11,7 +11,7 @@ apiKey = "Jdf4GP2674AxHAGBMLInCvwN6ZydDgZ5"
 
 @app.route('/')
 def index():
-    return "Hello World!"
+    return app.send_static_file("index.html")
 
 # event search sample url
 # https://app.ticketmaster.com/discovery/v2/events.json?apikey=Jdf4GP2674AxHAGBMLInCvwN6ZydDgZ5&keyword=Los+Angeles&segmentId=KZFzniwnSyZfZ7v7nE&radius=10&unit=miles&geoPoint=9q5cs
@@ -40,6 +40,8 @@ def eventSearch():
         'geoPoint': str(geoPoint),
         'apikey':str(apiKey)
     }
+    # print(baseAPIUrl+'events.json')
+    # print(params)
     response=requests.get(baseAPIUrl+'events.json',params=params)
     eventData=response.json()
 
@@ -59,7 +61,7 @@ def eventSearch():
             'date': event['dates']['start']['localDate']+","+event['dates']['start']['localTime'],
             'icon': event['images'][0]['url'],
             'event': event['name'],
-            'genre': event['_embedded']['attractions'][0]['classifications'][0]['segment']['name'],
+            'genre': event['_embedded']['attractions'][0]['classifications'][0]['segment']['name'] if 'attractions' in event['_embedded'] else "Undefined",
             'venue': event['_embedded']['venues'][0]['name']
         })
     return json.dumps(searchData, indent=4)
@@ -90,9 +92,9 @@ def eventInfo():
 
     date = eventDetailsData['dates']['start']['localDate'] + \
         ","+eventDetailsData['dates']['start']['localTime']
-    artists = [[artist['name'],artist['url']] for artist in eventDetailsData['_embedded']['attractions']]
+    artists = [[artist['name'],artist['url']] for artist in eventDetailsData['_embedded']['attractions']] if 'attractions' in eventDetailsData['_embedded'] else ""
     genres = [eventDetailsData['_embedded']['attractions'][0]
-              ['classifications'][0][type]['name'] for type in ['subGenre','genre','segment','subType','type']]
+              ['classifications'][0][type]['name'] for type in ['subGenre','genre','segment','subType','type']] if 'attractions' in eventDetailsData['_embedded'] else ""
     priceRange=""
     if 'priceRanges' in eventDetailsData:
         priceRange=str(eventDetailsData['priceRanges'][0]['min'])+'-'+str(eventDetailsData['priceRanges'][0]['max'])
@@ -104,7 +106,7 @@ def eventInfo():
         'priceRange': priceRange,
         'ticketStatus': eventDetailsData['dates']['status']['code'],
         'buyAt': eventDetailsData['url'],
-        'seatMap': eventDetailsData['seatmap']['staticUrl']
+        'seatMap': eventDetailsData['seatmap']['staticUrl'] if 'seatmap' in eventDetailsData else ""
     }
     return json.dumps(eventData, indent=4)
 
@@ -139,7 +141,9 @@ def venueInfo():
         'address': venueDetailsData['address']['line1'],
         'city': venueDetailsData['city']['name']+', '+venueDetailsData['state']['stateCode'],
         'postcode': venueDetailsData['postalCode'],
-        'upcomingEvents': venueDetailsData['url']
+        'upcomingEvents': venueDetailsData['url'] if 'url' in venueDetailsData else "",
+        'image' : venueDetailsData['images'][0]['url'] if 'images' in venueDetailsData else "NoImage"
+        
     }
     return json.dumps(venueData, indent=4)
 

@@ -44,7 +44,7 @@ def eventSearch():
     # print(params)
     response=requests.get(baseAPIUrl+'events.json',params=params)
     eventData=response.json()
-
+    print("erfsedvsdfvsdfvsdfvdsfv", eventData)
     #### ------------Sample Data------------------ ####
     # response=requests.get("http://127.0.0.1:5000/sampleData")
     # eventData=response.json()
@@ -55,6 +55,8 @@ def eventSearch():
         return json.dumps([])
 
     searchData = []
+    if '_embedded' not in eventData:
+        return json.dumps(searchData, indent=4)
     for event in eventData['_embedded']['events']:
         searchData.append({
             'id': event['id'],
@@ -135,6 +137,9 @@ def venueInfo():
     if 'error' in venueDetailsData:
         return json.dumps([])
 
+    if '_embedded' not in venueDetailsData:
+        return json.dumps({"novenue":"0"}, indent=4)
+
     venueDetailsData=venueDetailsData['_embedded']['venues'][0]
     venueData={
         'name': venueDetailsData['name'],
@@ -147,20 +152,20 @@ def venueInfo():
     }
     return json.dumps(venueData, indent=4)
 
-@app.route('/sampleData')
-def sampleData():
-    with open('sampleData.json', 'r') as f:
-        return json.load(f)
+# @app.route('/sampleData')
+# def sampleData():
+#     with open('sampleData.json', 'r') as f:
+#         return json.load(f)
 
-@app.route('/sampleEventData')
-def sampleEventData():
-    with open('sampleEventData.json', 'r') as f:
-        return json.load(f)
+# @app.route('/sampleEventData')
+# def sampleEventData():
+#     with open('sampleEventData.json', 'r') as f:
+#         return json.load(f)
     
-@app.route('/sampleVenueData')
-def sampleVenueData():
-    with open('sampleVenueData.json', 'r') as f:
-        return json.load(f)
+# @app.route('/sampleVenueData')
+# def sampleVenueData():
+#     with open('sampleVenueData.json', 'r') as f:
+#         return json.load(f)
     
 if __name__=='__main__':
     app.run(debug=True)

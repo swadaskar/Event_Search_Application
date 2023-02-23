@@ -1,3 +1,8 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
 body {
     /* margin: 0; */
@@ -37,13 +42,23 @@ body {
     width: 100%;
     border-radius: 5px;
     background: none;
-    padding: 5px;
-    border: 1px solid #fff;
+    padding: 10px 12px;
+    border: 1px solid #c9c2c2;
     margin: 5px 0px;
     color: white;
 }
 
+.searchForm .contents select option{
+    background-color: #000000c2;
+}
+
+.searchForm .contents #distanceColumn {
+    padding-right: 80px;
+    width: 50%;
+}
+
 .searchForm .contents .submit {
+    margin-right: 4px;
     padding: 12px 27px;
     border-radius: 7px;
     /* background-color: #FAAC06; */
@@ -79,9 +94,9 @@ body {
     color: #93e4ff;
 }
 
-.searchForm .contents table td {
+/* .searchForm .contents table td {
     padding: 0px 25px 0px 0px;
-}
+} */
 
 
 /* -------------------------Event List------------------------ */
@@ -128,14 +143,23 @@ body {
     color: #0674fa;
     cursor: pointer;
 }
+/* --------------------------No Records--------------------------- */
 
+#noRecords {
+    background-color: white;
+    text-align: center;
+    width: 1000px;
+    padding: 8px 0px;
+    color: red;
+    margin: 42px auto 0 auto;
+}
 
 /* --------------------------Event details--------------------------- */
 
-.eventDetails {
+.eventInfo {
     margin: 100px auto 0 auto;
     width: 835px;
-    height: 435px;
+    /* height: 435px; */
     margin-top: 64px;
     padding: 31px;
     border: 0px solid gray;
@@ -150,9 +174,14 @@ body {
     margin-bottom: 25px;
 }
 
-.eventDetails .textContent {
+/* .eventDetails .textContent {
     width: 438px;
+} */
+
+.eventDetails #eventTextDetails {
+    width: 50%;
 }
+
 .eventDetails .textContent .subheading {
     font-size: 19px;
     color: #6af9f8;
@@ -186,7 +215,7 @@ body {
 
 .eventDetails .arrowVenue{
     font-size: 22px;
-    margin-top: 41px;
+    margin-top: 18px;
 }
 
 .eventDetails .arrowVenue .downArrow{
@@ -199,7 +228,12 @@ body {
     cursor: pointer;
 }
 
-/* --------------------------Event details--------------------------- */
+.eventDetails .arrowVenue .downArrow:hover {
+    border: 2px solid white;
+    border-top: 0px;
+    border-left: 0px;
+}
+/* --------------------------Venue details--------------------------- */
 
 .venueDetails {
     /* margin-top: 25px; */

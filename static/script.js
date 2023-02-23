@@ -16,6 +16,7 @@ const IPInfoTokenKey = 'f9416a8146ee1d'
 
 function autoLocate(checkBox){
     if(checkBox.checked == true){
+        // document.getElementById("location").required = false
         document.getElementById("location").style.display="none";
         document.getElementById("location").value = '';
         var xhttp = new XMLHttpRequest();
@@ -25,6 +26,7 @@ function autoLocate(checkBox){
         latlon = jsonObject['loc']
     }
     else{
+        // document.getElementById("location").required = true
         document.getElementById("location").style.display = "inline";
         latlon = ''
     }
@@ -41,43 +43,54 @@ function getGeoHash(address) {
     }
     return jsonObject.results[0].geometry.location.lat + ',' + jsonObject.results[0].geometry.location.lng;
 }
-//dddd
-function searchEvents() {
-    // collect the data
-    var categories = {
-        "default": "",
-        "music": "KZFzniwnSyZfZ7v7nJ",
-        "sports": "KZFzniwnSyZfZ7v7nE",
-        "art": "KZFzniwnSyZfZ7v7na",
-        "film": "KZFzniwnSyZfZ7v7nn",
-        "miscellaneous": "KZFzniwnSyZfZ7v7n1"
-    };
 
-    keyword = document.getElementById("keyword").value;
-    segmentID = categories[document.getElementById("category").value];
-    radius = document.getElementById("distance").value;
-    unit = "miles";
-    if (document.getElementById("location").style.display == "none"){
-        geoPoint = latlon;
-    }else{
-        geoPoint = getGeoHash(document.getElementById("location").value);
-        if (geoPoint == "error") {
-            alert("Invalid address. Please enter a correct location.");
-            return;
+function searchEvents() {
+    if (document.getElementById('keyword').value != '' && (document.getElementById('location').value != '' || document.getElementById('autodetect').checked == true)) {
+        // collect the data
+        var categories = {
+            "default": "",
+            "music": "KZFzniwnSyZfZ7v7nJ",
+            "sports": "KZFzniwnSyZfZ7v7nE",
+            "art": "KZFzniwnSyZfZ7v7na",
+            "film": "KZFzniwnSyZfZ7v7nn",
+            "miscellaneous": "KZFzniwnSyZfZ7v7n1"
+        };
+
+        keyword = document.getElementById("keyword").value;
+        segmentID = categories[document.getElementById("category").value];
+        radius = document.getElementById("distance").value;
+        unit = "miles";
+        if (document.getElementById("location").style.display == "none"){
+            geoPoint = latlon;
+            console.log(geoPoint)
+        }else{
+            if (document.getElementById("location").value == ''){
+                // alert("Please enter a location.");
+                return;
+            }
+            geoPoint = getGeoHash(document.getElementById("location").value);
+            if (geoPoint == "error") {
+                alert("Invalid address. Please enter a correct location.");
+                return;
+            }
+        }
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", baseBackendURL + `/event/search?keyword=${keyword}&segmentID=${segmentID}&radius=${radius}&unit=${unit}&geoPoint=${geoPoint}`,false);
+        xhttp.send();
+        
+        jsonObject = JSON.parse(xhttp.responseText);
+        console.log(jsonObject);
+        console.log(jsonObject.length)
+
+        if (jsonObject.length>0) {
+            // display the data
+            document.getElementById('noRecords').style.display = "none";
+            makeTable(jsonObject);   
+        }else{
+            document.getElementById('noRecords').style.display = "block";
+            document.getElementById('eventList').style.display = "none";
         }
     }
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", baseBackendURL + `/event/search?keyword=${keyword}&segmentID=${segmentID}&radius=${radius}&unit=${unit}&geoPoint=${geoPoint}`,false);
-    xhttp.send();
-    
-    jsonObject = JSON.parse(xhttp.responseText);
-    console.log(jsonObject);
-
-    if (jsonObject.length>0) {
-        // display the data
-        makeTable(jsonObject);   
-    }
-    
 }
 
 function makeTable(jsonObject) {
@@ -199,7 +212,7 @@ function makeEventInfo(jsonObject) {
         htmlText += ' vs. ' + jsonObject['artist'][i][0]
     }
     htmlText += '</div>'
-    htmlText += '<table><tr><td>'
+    htmlText += '<table><tr><td id="eventTextDetails">'
     htmlText += '<div class="textContent">'
     htmlText += '<div class="subheading">Date</div>'
     htmlText += '<div class="text">'+date+' '+time+'</div>'
@@ -222,7 +235,7 @@ function makeEventInfo(jsonObject) {
         htmlText += '<div class="text">' + jsonObject['priceRange'] + ' USD</div>'
     }
     htmlText += '<div class="subheading">Ticket Status</div>'
-    htmlText += '<div class="text"><span class="ticketStatus" style="background:'+color+';">' + ticketStatus + '</span></div>'
+    htmlText += '<div class="text" style="padding: 5px 0px;"><span class="ticketStatus" style="background:'+color+';">' + ticketStatus + '</span></div>'
     htmlText += '<div class="subheading">Buy Ticket At</div>'
     htmlText += '<div class="text"><a href="' + jsonObject['buyAt'] +'" target="_blank">Ticketmaster</a></div>'
     htmlText += '</div></td><td>'
@@ -246,7 +259,10 @@ function venueInfo(venue) {
     xhttp.send();
     jsonObject = JSON.parse(xhttp.responseText);
     console.log(jsonObject);
-
+    if (jsonObject.hasOwnProperty('novenue')){
+        document.getElementById("arrowVenue").style.display = "none"
+        return
+    }
     // display the data
     makeVenueInfo(jsonObject);
 
@@ -312,15 +328,22 @@ function makeVenueInfo(jsonObject) {
     {/* https://www.google.com/maps/search/?api=1&query=centurylink+field */}
 
 function resetForm() {
-    // document.getElementById('keyword').value = "";
-    // document.getElementById('category').value = "Default";
-    // document.getElementById('distance').value = "10";
-    // document.getElementById('unit').value = "";
-    // document.getElementById('location').value = "";
+    document.getElementById('keyword').value = "";
+    document.getElementById('category').selectedIndex="0";
+    document.getElementById('distance').value = "10";
+    
+    if (document.getElementById('autodetect').checked){
+        document.getElementById("location").style.display = "inline-block";
+        latlon = ''
+        document.getElementById('autodetect').checked = false;
+    }
+    document.getElementById('location').value = "";
+
+    document.getElementById('noRecords').style.display = "none";
     document.getElementById('eventList').style.display = "none";
     document.getElementById('eventDetails').style.display = "none";
     document.getElementById('venueDetails').style.display = "none";
-    document.getElementById('location').style.display = "inline-block";
+    // document.getElementById('location').style.display = "inline-block";
 }
 
 

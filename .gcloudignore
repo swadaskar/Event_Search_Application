@@ -1,0 +1,6 @@
+sampleData.json
+sampleEventData.json
+sampleVenueData.json
+env/
+.gitattributes
+.git/

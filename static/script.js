@@ -2,7 +2,7 @@
 let latlon = ''
 
 // Current local backend server
-const baseBackendURL = 'http://127.0.0.1:5000/'
+const baseBackendURL = 'http://127.0.0.1:5000'
 
 // geooding api
 const baseGeocodingURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='
@@ -65,12 +65,14 @@ function searchEvents() {
             console.log(geoPoint)
         }else{
             if (document.getElementById("location").value == ''){
-                // alert("Please enter a location.");
                 return;
             }
             geoPoint = getGeoHash(document.getElementById("location").value);
             if (geoPoint == "error") {
-                alert("Invalid address. Please enter a correct location.");
+                document.getElementById('noRecords').style.display = "block";
+                document.getElementById('eventList').style.display = "none";
+                document.getElementById('eventDetails').style.display = "none";
+                document.getElementById('venueDetails').style.display = "none";
                 return;
             }
         }
@@ -85,29 +87,38 @@ function searchEvents() {
         if (jsonObject.length>0) {
             // display the data
             document.getElementById('noRecords').style.display = "none";
+            document.getElementById('eventList').style.display = "none";
+            document.getElementById('eventDetails').style.display = "none";
+            document.getElementById('venueDetails').style.display = "none";
             makeTable(jsonObject);   
         }else{
             document.getElementById('noRecords').style.display = "block";
             document.getElementById('eventList').style.display = "none";
+            document.getElementById('eventDetails').style.display = "none";
+            document.getElementById('venueDetails').style.display = "none";
         }
     }
 }
 
 function makeTable(jsonObject) {
-    htmlText = '<table id="eventTable" class="eventTable">'
+    let htmlText = '<table id="eventTable" class="eventTable">'
     htmlText += '<tr>'
-    htmlText += '<th style="width:12%;">Date</th>'
-    htmlText += '<th style="width:12%;">Icon</th>'
-    htmlText += '<th style="width:50%;" onclick="sortTable(2)"><a>Event</a></th>'
-    htmlText += '<th style="width:9%;" onclick="sortTable(3)"><a>Genre</a></th>'
-    htmlText += '<th style="width:17%;" onclick="sortTable(4)"><a>Venue</a></th>'
+    htmlText += '<th style="width:15%;">Date</th>'
+    htmlText += '<th style="width:15%;">Icon</th>'
+    htmlText += '<th style="width:39%;" onclick="sortTable(2)"><a>Event</a></th>'
+    htmlText += '<th style="width:11%;" onclick="sortTable(3)"><a>Genre</a></th>'
+    htmlText += '<th style="width:20%;" onclick="sortTable(4)"><a>Venue</a></th>'
     htmlText += '</tr>'
     for (var i = 0; i < jsonObject.length && i<20 ; i++) {
         let [date,time] = jsonObject[i]['date'].split(",")
         htmlText += '<tr>'
-        htmlText += '<td>' + date+ '<span style="display:block;">'+time+'</span></td>'
-        htmlText += '<td><img src="' + jsonObject[i]['icon'] + '" alt="icon" width="auto" height="50"></td>'
-        htmlText += '<td><a onclick=\"eventInfo(\'' + jsonObject[i]['id'] +'\')\">' + jsonObject[i]['event'] + '</a></td>'
+        htmlText += '<td>' + date
+        if (time != undefined){
+            htmlText += '<span style="display:block;">' + time + '</span>'
+        }
+        htmlText += '</td>'
+        htmlText += '<td><img src="' + jsonObject[i]['icon'] + '" alt="icon" width="85" height="50"></td>'
+        htmlText += '<td><a onclick="eventInfo(\'' + jsonObject[i]['id'] +'\')">' + jsonObject[i]['event'] + '</a></td>'
         htmlText += '<td>' + jsonObject[i]['genre'] + '</td>'
         htmlText += '<td>' + jsonObject[i]['venue'] + '</td>'
         htmlText += '</tr>'
@@ -130,8 +141,14 @@ function sortTable(n) {
         rows = table.rows;
         for (i = 1; i < (rows.length - 1); i++) {
             shouldSwitch = false;
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (n==2){
+                x = rows[i].getElementsByTagName("TD")[n].getElementsByTagName("a")[0];
+                y = rows[i + 1].getElementsByTagName("TD")[n].getElementsByTagName("a")[0];
+            }else{
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+            }
+            
             if (dir == "asc") {
                 if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                     shouldSwitch = true;
@@ -172,7 +189,7 @@ function eventInfo(id) {
     document.getElementById('venueDetails').style.display = "none"
 
     // Go to the Table
-    document.getElementById("eventDetails").scrollIntoView();
+    document.getElementById("eventDetails").scrollIntoView({behavior: "smooth"});
 }
 
 function makeEventInfo(jsonObject) {
@@ -189,6 +206,7 @@ function makeEventInfo(jsonObject) {
             ticketStatus = "Off Sale"
             break;
         case "canceled":
+        case "cancelled":
             color="black"
             ticketStatus = "Canceled"
             break;
@@ -203,44 +221,68 @@ function makeEventInfo(jsonObject) {
         default:
             break;
     }
-    htmlText = '<div class="eventInfo">'
+    let htmlText = '<div class="eventInfo" id="eventInfo">'
     htmlText += '<div class="heading">'
-    if (jsonObject['artist'] != ""){
-        htmlText += jsonObject['artist'][0][0]
-    }
-    for (var i = 1; i < jsonObject['artist'].length; i++) {
-        htmlText += ' vs. ' + jsonObject['artist'][i][0]
-    }
+    // if (jsonObject['artist'] != ""){
+    //     htmlText += jsonObject['artist'][0][0]
+    // }
+    // for (var i = 1; i < jsonObject['artist'].length; i++) {
+    //     htmlText += ' vs. ' + jsonObject['artist'][i][0]
+    // }
+    htmlText += jsonObject['name']
     htmlText += '</div>'
-    htmlText += '<table><tr><td id="eventTextDetails">'
+    htmlText += '<table style="width:100%;"><tr><td id="eventTextDetails">'
     htmlText += '<div class="textContent">'
     htmlText += '<div class="subheading">Date</div>'
-    htmlText += '<div class="text">'+date+' '+time+'</div>'
-    htmlText += '<div class="subheading">Artist/Team</div>'
+    htmlText += '<div class="text">'+date
+    if (time != undefined){
+        htmlText += ' ' + time
+    }
+    htmlText += '</div>'
     if (jsonObject['artist'] != ""){
-        htmlText += '<div class="text"><a href="' + jsonObject['artist'][0][1] + '" target="_blank">' + jsonObject['artist'][0][0] + '</a>'
+        htmlText += '<div class="subheading">Artist/Team</div>'
+        if (jsonObject['artist'][0][1] != ""){
+            htmlText += '<div class="text"><a href="' + jsonObject['artist'][0][1] + '" target="_blank">' + jsonObject['artist'][0][0] + '</a>'
+        }else{
+            htmlText += '<div class="text">' + jsonObject['artist'][0][0]
+        }
         for (var i = 1; i < jsonObject['artist'].length; i++) {
+            if (jsonObject['artist'][i][1] != ""){
             htmlText += ' | <a href="' + jsonObject['artist'][i][1] + '" target="_blank">' + jsonObject['artist'][i][0] + '</a>'
+            }else{
+                htmlText += ' | ' + jsonObject['artist'][i][0]
+            }
         }
         htmlText += '</div>'
-    }else{
-        htmlText += '<div class="text"> </div>'
     }
-    htmlText += '<div class="subheading">Venue</div>'
-    htmlText += '<div class="text">' + jsonObject['venue'] + '</div>'
+    if (jsonObject['venue'] != "") {
+        htmlText += '<div class="subheading">Venue</div>'
+        htmlText += '<div class="text">' + jsonObject['venue'] + '</div>'
+    }
+    // Genres is always there as we don't show non genre having events from the table
     htmlText += '<div class="subheading">Genres</div>'
     htmlText += '<div class="text">' + jsonObject['genre'] + '</div>'
+
     if (jsonObject['priceRange'] != ""){
         htmlText += '<div class="subheading">Price Range</div>'
         htmlText += '<div class="text">' + jsonObject['priceRange'] + ' USD</div>'
     }
-    htmlText += '<div class="subheading">Ticket Status</div>'
-    htmlText += '<div class="text" style="padding: 5px 0px;"><span class="ticketStatus" style="background:'+color+';">' + ticketStatus + '</span></div>'
-    htmlText += '<div class="subheading">Buy Ticket At</div>'
-    htmlText += '<div class="text"><a href="' + jsonObject['buyAt'] +'" target="_blank">Ticketmaster</a></div>'
+
+    if (jsonObject['ticketStatus'] != "") {
+        htmlText += '<div class="subheading">Ticket Status</div>'
+        htmlText += '<div class="text" style="padding: 5px 0px;"><span class="ticketStatus" style="background:'+color+';">' + ticketStatus + '</span></div>'
+    }
+
+    if (jsonObject['buyAt'] != "") {
+        htmlText += '<div class="subheading">Buy Ticket At:</div>'
+        htmlText += '<div class="text"><a href="' + jsonObject['buyAt'] +'" target="_blank">Ticketmaster</a></div>'
+    }
     htmlText += '</div></td><td>'
     htmlText += '<div class="imageContent">'
-    htmlText += '<img src="' + jsonObject['seatMap'] + '" alt="Seat Map">'
+
+    if (jsonObject['seatMap'] != "") {
+    htmlText += '<img src="' + jsonObject['seatMap'] + '">'
+    }
     htmlText += '</div></td></tr></table></div>'
     htmlText += '<center><div id="arrowVenue" class="arrowVenue">'
     htmlText += 'Show Venue Details'
@@ -250,6 +292,8 @@ function makeEventInfo(jsonObject) {
     htmlText += '</div></center>'
     document.getElementById('eventDetails').style.display = "inline-block"
     document.getElementById('eventDetails').innerHTML = htmlText
+    // document.getElementById('eventInfo').style.backgroundColor = "rgba(255, 255, 255, 0.3)"
+    // document.getElementById('eventInfo').style.backdropFilter = "blur(10px)"
 }
 
 function venueInfo(venue) {
@@ -267,7 +311,7 @@ function venueInfo(venue) {
     makeVenueInfo(jsonObject);
 
     // Go to the venue card
-    document.getElementById("venueDetails").scrollIntoView();
+    document.getElementById("venueDetails").scrollIntoView({behavior: "smooth"});
 
     // Remove arrow button
     document.getElementById("arrowVenue").style.display="none"
@@ -279,7 +323,7 @@ function makeVenueInfo(jsonObject) {
     address= jsonObject['address'].split(" ").join("+")
     let [city,stateCode] = jsonObject['city'].split(", ")
     query = vname + '%2C+' + address + '%2C+' + city + '%2C+' + stateCode + '%2C+'+jsonObject['postcode']
-    htmltext = `<div class="heading" id="venueHeading"><span class="underline">${jsonObject['name']}</span></div>`
+    let htmltext = `<div class="heading" id="venueHeading"><span class="underline">${jsonObject['name']}</span></div>`
     if(jsonObject['image'] != "NoImage"){
         imageExists = true;
         htmltext+=  `<div class="imageContent">
@@ -290,22 +334,30 @@ function makeVenueInfo(jsonObject) {
                     <table class="mainTable">
                         <tr>
                             <td class="leftColumn">
-                                <table>
-                                    <tr>
-                                        <td><b>Address:</b></td>
-                                        <td>
-                                            <div>${jsonObject['address']}</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><div>${jsonObject['city']}</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><div>${jsonObject['postcode']}</div></td>
-                                    </tr>
-                                </table>
+                                <table>`
+    var jsonArray = ['address', 'city', 'postcode']
+    var jsonData = []
+    for (var i=0;i<jsonArray.length;i++){
+        if (jsonObject[jsonArray[i]]!=""){
+            jsonData.push(jsonObject[jsonArray[i]])
+        }
+    }
+    for (var i = 0; i < jsonData.length; i++) {
+        if (i==0){
+        htmltext+=  `<tr>
+                        <td><b>Address:</b></td>
+                        <td>
+                            <div>${jsonData[i]}</div>
+                        </td>
+                    </tr>`
+        }else{
+            htmltext += `<tr>
+                <td></td>
+                <td><div>${jsonData[i]}</div></td>
+            </tr>`
+        }
+    }
+    htmltext+=`</table>
                                 <div class="gmap"><a href="http://maps.google.com/maps/search/?api=1&query=${query}}" target="_blank">Open in Google Maps</a></div>
                             </td>
                             <td class="rightColumn">`

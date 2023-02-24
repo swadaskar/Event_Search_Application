@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="static/styles.css">
     <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'> -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
-    <script src="script.js"></script>
+    <script src="static/script.js"></script>
     <title>Events Search</title>
 </head>
 <body>
@@ -39,9 +39,9 @@
                             </td>
                         </tr>
                     </table>
-                    <label for="location">Location<span class="star">*</span></label>
+                    <label for="location" style="margin-right: 7px;">Location<span class="star">*</span></label>
                     <input type="checkbox" id="autodetect" name="autodetect" autocomplete="off"
-                        style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span style="padding-left: 5px;">Auto-Detect Location</span>
+                        style="display: inline !important; width: auto !important; height: 12px;" onchange="autoLocate(this)"><span style="padding-left: 5px;color: lightgrey;">Auto-Detect Location</span>
                     <input type="text" id="location" name="location" autocomplete="off" required>      
                     <br>
                     <br>

@@ -133,7 +133,7 @@ body {
     border-bottom: 1px solid black;
 }
 
-.eventTable th:has(a){
+.eventTable th a{
     text-decoration: none;
     cursor: pointer;
 }

@@ -2,7 +2,7 @@
 let latlon = ''
 
 // Current local backend server
-const baseBackendURL = 'http://127.0.0.1:5000'
+const baseBackendURL = ''
 
 // geooding api
 const baseGeocodingURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='
@@ -105,9 +105,9 @@ function makeTable(jsonObject) {
     htmlText += '<tr>'
     htmlText += '<th style="width:15%;">Date</th>'
     htmlText += '<th style="width:15%;">Icon</th>'
-    htmlText += '<th style="width:39%;" onclick="sortTable(2)"><a>Event</a></th>'
-    htmlText += '<th style="width:11%;" onclick="sortTable(3)"><a>Genre</a></th>'
-    htmlText += '<th style="width:20%;" onclick="sortTable(4)"><a>Venue</a></th>'
+    htmlText += '<th style="width:39%;text-decoration:none;cursor: pointer;" onclick="sortTable(2)"><a>Event</a></th>'
+    htmlText += '<th style="width:11%;text-decoration:none;cursor: pointer;" onclick="sortTable(3)"><a>Genre</a></th>'
+    htmlText += '<th style="width:20%;text-decoration:none;cursor: pointer;" onclick="sortTable(4)"><a>Venue</a></th>'
     htmlText += '</tr>'
     for (var i = 0; i < jsonObject.length && i<20 ; i++) {
         let [date,time] = jsonObject[i]['date'].split(",")

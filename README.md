@@ -10,5 +10,3 @@
 
 Link to the application: https://hw6-siddhant-python.uc.r.appspot.com/
 
-<br>
-Tell me it is.
